@@ -1,5 +1,6 @@
 package org.example;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,15 +12,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 public class MyTelegramBot extends TelegramLongPollingBot {
     private int menuLevel = 1;
+    private static final Dotenv dotenv = Dotenv.load();
 
     @Override
     public String getBotUsername() {
-        return "garagehellotest_bot";
+        return dotenv.get("BOT_USER_NAME");
     }
 
     @Override
     public String getBotToken() {
-        return "8042218966:AAFUihP6l53dKW7ZDlQnfKniufWD07NZg-w";
+        return dotenv.get("BOT_TOKEN");
     }
 
     @Override
@@ -29,16 +31,12 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             long chatId = update.getMessage().getChatId();
 
             switch (text) {
-                case "/start":
+                case "/start", "Назад":
                     menuLevel = 1;
                     updateKeyboard(chatId);
                     break;
                 case "Далі":
                     menuLevel = 2;
-                    updateKeyboard(chatId);
-                    break;
-                case "Назад":
-                    menuLevel = 1;
                     updateKeyboard(chatId);
                     break;
                 case "Кнопка 1":
